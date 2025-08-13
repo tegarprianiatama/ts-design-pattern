@@ -1,52 +1,91 @@
-namespace Builder {
-  interface IStudent {
-    name: string;
-    age: number;
-    category: string;
-  }
+namespace BuilderPattern {
+  class House {
+    doors = 0;
+    windows = 0;
+    roof = '';
 
-  class Student implements IStudent {
-    name = "";
-    age = 10;
-    category = "10 ABC";
-
-    constructor(name: string = "", age: number = 0, category: string = "") {
-      (this.name = name), (this.age = age), (this.category = category);
-    }
-
-    public getName(): string {
-      return this.name;
-    }
-
-    public setName(name: string): void {
-      this.name = name;
-    }
-
-    public getAge(): number {
-      return this.age;
-    }
-
-    public setAge(age: number): void {
-      this.age = age;
-    }
-
-    public getCategory(): string {
-      return this.category;
-    }
-
-    public setCategory(category: string): void {
-      this.category = category;
+    public describe(): string {
+      return `House with ${this.doors} doors, ${this.windows} windows and a ${this.roof} roof`;
     }
   }
 
-  const newStudent = new Student();
-  console.log("🚀 ~ newStudent:", newStudent);
+  interface HouseBuilder {
+    reset(): void;
+    buildDoors(): void;
+    buildWindows(): void;
+    buildRoof(): void;
+    getResult(): House;
+  }
 
-  newStudent.setName("tegar prianiatama");
-  newStudent.setAge(20);
-  newStudent.setCategory("12 ABC");
+  class WoodenHouseBuilder implements HouseBuilder {
+    private house: House = new House();
 
-  console.log("🚀 ~ newStudent:", newStudent);
+    reset(): void {
+      this.house = new House();
+    }
 
-  console.log("🚀 ~ newStudent:", newStudent.getName());
+    buildDoors(): void {
+      this.house.doors = 2;
+    }
+
+    buildWindows(): void {
+      this.house.windows = 4;
+    }
+
+    buildRoof(): void {
+      this.house.roof = 'wooden';
+    }
+
+    getResult(): House {
+      const result = this.house;
+      this.reset();
+      return result;
+    }
+  }
+
+  class StoneHouseBuilder implements HouseBuilder {
+    private house: House = new House();
+
+    reset(): void {
+      this.house = new House();
+    }
+
+    buildDoors(): void {
+      this.house.doors = 1;
+    }
+
+    buildWindows(): void {
+      this.house.windows = 2;
+    }
+
+    buildRoof(): void {
+      this.house.roof = 'stone';
+    }
+
+    getResult(): House {
+      const result = this.house;
+      this.reset();
+      return result;
+    }
+  }
+
+  class Director {
+    construct(builder: HouseBuilder): House {
+      builder.reset();
+      builder.buildDoors();
+      builder.buildWindows();
+      builder.buildRoof();
+      return builder.getResult();
+    }
+  }
+
+  const director = new Director();
+
+  const woodenBuilder = new WoodenHouseBuilder();
+  const woodenHouse = director.construct(woodenBuilder);
+  console.log(woodenHouse.describe());
+
+  const stoneBuilder = new StoneHouseBuilder();
+  const stoneHouse = director.construct(stoneBuilder);
+  console.log(stoneHouse.describe());
 }
