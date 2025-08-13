@@ -1,41 +1,18 @@
 import { IItems } from "./IItems";
 
+// The previous implementation stored the real data in private fields
+// prefixed with underscores and exposed them through getters/setters.
+// While this satisfied the interface at compile time, the properties were
+// not enumerable and when an instance was logged or serialised it produced
+// objects with the private field names (e.g. `_uuid`) instead of the
+// expected `uuid`, `full_name` and `age` keys.
+
 class Items implements IItems {
-  private _uuid: string;
-
-  public get uuid() {
-    return this._uuid;
-  }
-
-  public set uuid(value: string) {
-    this._uuid = value;
-  }
-
-  private _full_name: string;
-
-  public get full_name() {
-    return this._full_name;
-  }
-
-  public set full_name(value: string) {
-    this._full_name = value;
-  }
-
-  private _age: number;
-
-  public get age() {
-    return this._age;
-  }
-
-  public set age(value: number) {
-    this._age = value;
-  }
-
-  constructor(_uuid: string, _full_name: string, _age: number) {
-    this._uuid = _uuid;
-    this._full_name = _full_name;
-    this._age = _age;
-  }
+  constructor(
+    public uuid: string,
+    public full_name: string,
+    public age: number
+  ) {}
 }
 
 export default Items;
