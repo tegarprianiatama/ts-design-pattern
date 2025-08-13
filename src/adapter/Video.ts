@@ -15,7 +15,7 @@ class Video implements IVideo {
     return this.title;
   }
 
-  public seTitlel(title: string): void {
+  public setTitle(title: string): void {
     this.title = title;
   }
 
@@ -23,7 +23,7 @@ class Video implements IVideo {
     return this.artist;
   }
 
-  public seTArtist(artist: string): void {
+  public setArtist(artist: string): void {
     this.artist = artist;
   }
 
