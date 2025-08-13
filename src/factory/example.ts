@@ -1,33 +1,44 @@
-interface IEmployee {
-  name: string;
-  job_title: string;
-  salary: number;
-}
-
-class Employee {
-  name = "";
-  job_title = "";
-  salary = 0;
-
-  constructor(name: string = "", job_title: string = "", salary: number = 0) {
-    this.name = name;
-    this.job_title = job_title;
-    this.salary = salary;
-  }
-}
-
-class EmployeeFactory {
-  createManager(name: string): IEmployee {
-    return new Employee(name, "Manager", 25000000);
+namespace FactoryMethod {
+  abstract class Transport {
+    abstract deliver(): string;
   }
 
-  createStaff(name: string): IEmployee {
-    return new Employee(name, "Staff", 15000000);
+  class Truck extends Transport {
+    deliver(): string {
+      return 'Deliver by land in a box';
+    }
   }
+
+  class Ship extends Transport {
+    deliver(): string {
+      return 'Deliver by sea in a container';
+    }
+  }
+
+  abstract class Logistics {
+    public planDelivery(): string {
+      const transport = this.createTransport();
+      return transport.deliver();
+    }
+
+    protected abstract createTransport(): Transport;
+  }
+
+  class RoadLogistics extends Logistics {
+    protected createTransport(): Transport {
+      return new Truck();
+    }
+  }
+
+  class SeaLogistics extends Logistics {
+    protected createTransport(): Transport {
+      return new Ship();
+    }
+  }
+
+  const road = new RoadLogistics();
+  console.log(road.planDelivery());
+
+  const sea = new SeaLogistics();
+  console.log(sea.planDelivery());
 }
-
-const newManager = new EmployeeFactory().createManager("tegar prianiatama");
-console.log("🚀 ~ newManager:", newManager);
-
-const newStaff = new EmployeeFactory().createStaff("puguh santoso");
-console.log("🚀 ~ newStaff:", newStaff);
